@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyBwReZo8SG8LKYpQ1_QncWcnoPhVbp68bI',
+    authDomain: 'limastar-membership.firebaseapp.com',
+    databaseURL: 'https://limastar-membership.firebaseio.com',
+    projectId: 'limastar-membership',
+    storageBucket: 'limastar-membership.appspot.com',
+    messagingSenderId: '918916774096'
+  }
 };
 
 /*

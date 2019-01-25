@@ -1,0 +1,134 @@
+<app-close-button></app-close-button>
+
+<div class="container bg-light p-3 mt-5">
+
+  <h4>搜尋外傭</h4>
+
+  <div class="row">
+
+    <div class="col-12 row my-3">
+
+      <div class="form-group col-12 col-sm-6">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [checked]="filter.jobs.indexOf('baby') > -1" (change)="toggleJobs('baby')" />
+          <label class="form-check-label">照顧嬰兒</label>
+        </div>
+      </div>
+
+      <div class="form-group col-12 col-sm-6">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [checked]="filter.jobs.indexOf('children') > -1" (change)="toggleJobs('children')" />
+          <label class="form-check-label">幼兒護理</label>
+        </div>
+      </div>
+
+      <div class="form-group col-12 col-sm-6">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [checked]="filter.jobs.indexOf('elderly') > -1" (change)="toggleJobs('elderly')" />
+          <label class="form-check-label">照顧老人家</label>
+        </div>
+      </div>
+
+      <div class="form-group col-12 col-sm-6">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [checked]="filter.jobs.indexOf('pets') > -1" (change)="toggleJobs('pets')" />
+          <label class="form-check-label">照顧竉物</label>
+        </div>
+      </div>
+
+      <form class="form-group col-12">
+        <label>國藉</label>
+        <select [(ngModel)]="filter.nationality" name="nationality" class="form-control">
+          <option value="Indonesian">Indonesian</option>
+          <option value="Filipino">Filipino</option>
+        </select>
+      </form>
+
+    </div>
+
+    <div class="col-12 my-3">
+      <div class="input-group">
+        <input type="number" class="form-control" placeholder="外傭編號" [(ngModel)]="filter.op" name="op" autocomplete="off">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" (click)="applyFilter()">搜尋</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="container" *ngIf="helperService.list | async as helpers; else loadingHelpers">
+  <div class="row my-4 bg-light p-3" *ngFor="let helper of helpers">
+
+    <!-- Photo -->
+    <div class="col-12 col-sm-3 d-flex justify-content-center align-items-center">
+      <img height="200" class="rounded" [src]="helper.biodata" [alt]="../../../../assets/logo.png" data-toggle="modal" data-target="#imageModal" (click)="setImageModal(helper.biodata)" />
+    </div>
+
+    <!-- Small Screen Only: Helper OP -->
+    <div class="col-12 d-block d-sm-none text-center">
+      <h4>{{ helper.op }}</h4>
+    </div>
+
+    <div class="col-6 d-none d-sm-block d-flex flex-column justify-content-center">
+      <h4 class="d-none d-sm-block">{{ helper.op }}</h4>
+
+      <p>
+        <b>國藉:</b> {{ helper.nationality }}
+      </p>
+      <p>
+        <b>工作經驗:</b> {{ helper.experience }} - {{ helper.duty }}
+      </p>
+
+      <a [routerLink]="helper.id" class="btn btn-primary d-none d-sm-block">了解更多</a>
+    </div>
+
+    <div class="col-6 col-sm-3 d-flex flex-column justify-content-center">
+      <p><b>照顧嬰兒:</b> <i class="far fa-check-circle text-success ml-2" *ngIf="helper.jobs.baby; else cross"></i></p>
+      <p><b>照顧小孩:</b> <i class="far fa-check-circle text-success ml-2" *ngIf="helper.jobs.children; else cross"></i></p>
+      <p><b>照顧老人家:</b> <i class="far fa-check-circle text-success ml-2" *ngIf="helper.jobs.elderly; else cross"></i></p>
+    </div>
+
+    <!-- Small Screen Only: "View More" Button -->
+    <div class="col-12 d-block d-sm-none ">
+      <a [routerLink]="'helpers/' + helper.id" class="btn btn-primary w-100">了解更多</a>
+    </div>
+    
+  </div>
+</div>
+
+<div class="container my-4" *ngIf="helperService.list | async as helperlist">
+  <div class="d-flex justify-content-center" *ngIf="helperList">
+
+    <button (click)="loadMore(helperlist[helperlist.length - 1].doc)" class="btn btn-outline-dark">更多</button>
+
+  </div>
+</div>
+
+<ng-template #loadingHelpers>
+  <app-load-spinner></app-load-spinner>
+</ng-template>
+
+<ng-template #cross>
+  <i class="far fa-times-circle text-danger ml-2"></i>
+</ng-template>
+
+
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Biodata</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <img [src]="imageModalFile" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

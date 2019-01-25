@@ -1,0 +1,64 @@
+<app-close-button url="../"></app-close-button>
+
+<ng-template #loadingSpinner>
+  <app-load-spinner></app-load-spinner>
+</ng-template>
+
+<div *ngIf="helperDetail | async as helper else loadingSpinner" class="my-5">
+  <div class="container my-5 p-3 bg-light rounded">
+    <h3>{{ helper.op }} - {{ helper.name }}</h3>
+  </div>
+
+  <div class="container bg-light rounded p-3 my-3">
+    <div class="row">
+      <div class="col-12 col-md-4 p-4">
+        <img class="image-thumbnail d-block mx-auto rounded" [src]="helper.biodata" Width="300" />
+      </div>  
+
+      <div class="col-12 col-md-8 p-4">
+        <h3>詳細資料</h3>
+        <hr>
+        <p><b>#編號:</b> {{ helper.op }}</p>
+        <p><b>姓名:</b> {{ helper.name }}</p>
+        <p><b>國藉:</b> {{ helper.nationality }}</p>
+
+        <br>
+
+        <p><b>工作經驗:</b> {{ helper.experience }}</p>
+        <p><b>照顧:</b> {{ helper.duty }}</p>
+
+        <br>
+
+        <p><b>專長:</b> {{ formatJobs(helper.jobs) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container bg-light rounded p-3 my-3" *ngIf="helper.youtube">
+    <h3>自我介紹</h3>
+    <hr>
+    <iframe [src]="'https://www.youtube.com/embed/' + helper.youtube"<iframe width="560" height="315" src="https://www.youtube.com/embed/SC7lLm6QAb8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <div class="my-5"></div>
+
+  <div class="container bg-light p-3 my-3" *ngIf="recommendedList | async as recommended else loadingSpinner">
+    <h3 class="text-center">更多女傭</h3>
+    <hr>
+    <div class="container-fluid no-scrollbar" style="overflow-y: scroll;">
+      <div class="row flex-row flex-nowrap">
+        <div class="col-3 mx-5 card card-block" *ngFor="let helper of recommended">
+          <img [src]="helper.biodata" class="rounded card-image-top" width="100%"/>
+          <div class="card-body">
+            <h5 class="card-title">{{ helper.op }}</h5>
+            <h6 class="card-subtitle">工作經驗: {{ helper.experience }}</h6>
+            <br>
+            <p class="card-text">專長: {{ formatJobs(helper.jobs) }}</p>
+            <button class="btn btn-primary rounded" (click)="viewThisHelper(helper.id)">了解更多</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
